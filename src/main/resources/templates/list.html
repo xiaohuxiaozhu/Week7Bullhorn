@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List</title>
+    <th:block th:insert="base :: Bootstrap"></th:block>
+</head>
+<body>
+<div th:replace="base::navbar"></div>
+<div class="container">
+
+    <div class="jumbotro lead text-center">
+        <h2>Message Post</h2>
+    </div>
+    <form action="#" method="post" th:action="@{/check}">
+        <!--        <span sec:authorize="hasAuthority('ADMIN')">-->
+        <!--             <button class="btn btn-link" type="submit">Delete Selected</button>-->
+        <!--        </span>-->
+
+        <table class="table table-hover table-striped" style="width:100%">
+            <thead class="thead-light">
+            <tr>
+
+                <th>Title</th>
+                <th>Content</th>
+                <th>Posted Date</th>
+                <th>Posted By</th>
+                <th sec:authorize="isAuthenticated()">Actions</th>
+            </tr>
+            </thead>
+            <!--enhanced for loop-->
+            <tr th:each="message : ${messages}" th:object="${message}">
+
+
+                <td>
+                    <a th:href="@{/detail/{id}(id=*{id})}" th:text="*{title}"></a>
+                </td>
+
+                <td>
+                    <a th:href="@{/detail/{id}(id=*{id})}" th:text="*{content}"></a>
+                </td>
+
+                <td>
+                    <span th:text="${#temporals.format(message.postedDateTime, 'dd MMM yyyy, hh:mm a')}"></span>
+                </td>
+
+                <td>
+                    <strong>
+                        <a th:href="@{/user/{id}(id=*{user.id})}">[[*{user.firstName}]]</a>
+                    </strong>
+                </td>
+
+                <td sec:authorize="isAuthenticated()">
+                    <div sec:authorize="hasAuthority('USER')">
+                    <span th:if="${user.id == message.user.id}">
+                        <a th:href="@{/update/{id}(id=${message.id})}">edit</a> -
+                        <a th:href="@{/delete/{id}(id=${message.id})}">Delete</a>
+                    </span>
+                    </div>
+                    <div sec:authorize="hasAuthority('ADMIN')">
+
+                        <a th:href="@{/update/{id}(id=${message.id})}">edit</a> -
+                        <a th:href="@{/delete/{id}(id=${message.id})}">Delete</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<br/>
+<div th:replace="base::footer"></div>
+</body>
+</html>

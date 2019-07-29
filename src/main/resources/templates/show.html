@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+    <th:block th:insert="base :: Bootstrap"></th:block>
+</head>
+<body>
+<div th:replace="base::navbar"></div>
+<div class="container">
+
+    <div class="jumbotro lead text-center">
+        <h2>Message Details</h2>
+        <table class="table">
+            <tr>
+                <td>Title:</td>
+                <td><span th:text="${message.title}"></span></td>
+            </tr>
+            <tr>
+                <td>Content:</td>
+                <td><span th:text="${message.content}"></span></td>
+            </tr>
+            <tr>
+                <td>Posted Date:</td>
+                <td>
+                    <span th:text="${#temporals.format(message.postedDateTime, 'dd MMM yyyy, hh:mm a')}"></span>
+                </td>
+
+            </tr>
+            <tr>
+                <td>Posted By:</td>
+                <td>
+                    <strong>
+                        <a th:href="@{/user/{id}(id=${message.user.id})}"
+                           th:text="${message.user.firstName} + ' ' + ${message.user.lastName}"></a>
+                    </strong>
+                </td>
+            </tr>
+            <tr>
+                <td>Picture:</td>
+                <td><img class="profile-picture"
+                         th:alt="Picture"
+                         th:src="${message.picturePath}">
+                <td>
+            </tr>
+        </table>
+
+
+        <div sec:authorize="hasAuthority('USER')">
+        <span th:if="${user_id == message.user.id}">
+            <a th:href="@{/update/{id}(id=${message.id})}">Edit</a>
+            <a th:href="@{/delete/{id}(id=${message.id})}">Delete</a>
+        </span>
+        </div>
+
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <a th:href="@{/update/{id}(id=${message.id})}">Edit</a>
+            <a th:href="@{/delete/{id}(id=${message.id})}">Delete</a>
+        </div>
+
+
+
+
+    </div>
+
+</div>
+<br/>
+<div th:replace="base::footer"></div>
+</body>
+</html>

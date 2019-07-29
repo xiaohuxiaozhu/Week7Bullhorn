@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+    <th:block th:insert="base :: Bootstrap"></th:block>
+</head>
+<body>
+<div th:replace="base::navbar"></div>
+
+<div class="container">
+
+    <div class="jumbotro lead text-center">
+        <h2>Admin Page</h2>
+        <!--        <thead>-->
+        <!--        <tr>-->
+        <!--            <th>User First Name</th>-->
+        <!--            <th>User Last Name</th>-->
+        <!--            <th>User Email</th>-->
+        <!--            <th>User User Name</th>-->
+
+        <!--        </tr>-->
+        <!--        </thead>-->
+        <tr >
+            <div th:each="user : ${users}">
+                User First Name :   <td th:text="${user.firstName}"></td><br/>
+                User Last Name:     <td th:text="${user.lastName}"></td><br/>
+                User Email:         <td th:text="${user.email}"></td><br/>
+                User User Name:     <td th:text="${user.username}"></td><br/>
+
+                <td>
+                    <ul style="list-style-type: none;">
+                        <li th:each="role : ${user.getRoles()}">
+                            <p th:text="${role.getRole()}"></p>
+                        </li>
+                    </ul>
+                </td>
+
+                <!--                <div sec:authorize="hasAuthority('ADMIN')">-->
+                <!--                <td><a th:href="@{/update/{id}(id=${user.id})}">Update User</a></td>-->
+                <!--                <td><a th:href="@{/delete/{id}(id=${user.id})}">Delete User</a></td>-->
+                <!--                </div>-->
+            </div>
+        </tr>
+    </div>
+
+
+
+
+</div>
+</table>
+</div>
+</div>
+
+</body>
+</html>

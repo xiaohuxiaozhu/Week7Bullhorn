@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html lang="en"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Message</title>
+    <th:block th:insert="base :: Bootstrap"></th:block>
+
+</head>
+<body>
+<div th:replace="base::navbar"></div>
+<div class="container">
+
+    <div class="jumbotro lead text-center">
+        <h2>Message</h2>
+        <form action="#" enctype="multipart/form-data" method="post"
+              th:action="@{/process}" th:object="${message}">
+
+            <!--Hidden properties-->
+            <input th:field="*{id}" type="hidden"/>
+
+            <input th:field="*{user}" th:value="${user}" type="hidden">
+
+            <div class="text-left">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="title">Title:</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="title" placeholder="Enter Title"
+                               th:field="*{title}" type="text"/>
+                        <span class="error-message" th:errors="*{title}" th:if="${#fields.hasErrors('title')}"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="content">Content:</label>
+
+                    <div class="col-sm-10">
+                <textarea class="form-control" id="content" placeholder="content" rows="5"
+                          th:field="*{content}"></textarea>
+                        <span class="error-message" th:errors="*{content}" th:if="${#fields.hasErrors('content')}"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="file"> Picture:</label>
+                    <div class="col-sm-10">
+                        <input class="form-control-file border" id="file" name="file" type="file">
+                        (Update or add new image)
+                    </div>
+                </div>
+
+                <div class="form-group row" th:unless="(*{picturePath.isEmpty()})">
+                    <input th:field="*{picturePath}" type="hidden"><!--[[*{picturePath}]]-->
+                    <label class="col-sm-2 col-form-label" for="file"></label>
+                    <div class="col-sm-10">
+                        <img class="profile-picture" th:alt="Picture" th:src="*{picturePath}"/><br/>
+                    </div>
+                    <span class="error-message"
+                          th:errors="*{picturePath}"
+                          th:if="${#fields.hasErrors('picturePath')}"></span>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Posted:</label>
+                    <div class="col-sm-10 text-left">
+                        <span th:text="${user.firstName} +' ' +${user.lastName}"></span><br/>
+                        <span class="error-message" th:errors="*{user}" th:if="${#fields.hasErrors('user')}"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Date:</label>
+                    <div class="col-sm-10 text-left">
+                    <span th:field="*{postedDateTime}"
+                          th:text="${#temporals.format(message.postedDateTime, 'dd MMM yyyy, hh:mm a')}"></span>
+
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+    </div>
+    <br/>
+
+</div>
+<div th:replace="base::footer"></div>
+
+</body>
+</html>
