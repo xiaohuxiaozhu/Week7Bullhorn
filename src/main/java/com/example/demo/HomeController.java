@@ -51,7 +51,7 @@ public class HomeController {
 
     @RequestMapping("/")
     public String listMessages(Model model) {
-        model.addAttribute("messages", messageRepository.findAllByOrderByPostedDateTimeDesc());//generate select * statement
+        model.addAttribute("messages", messageRepository.findAllByOrderByPostedDateTimeDesc());
         //we need because the below statement wont run if there is no authenticate user
         if (userService.getUser() != null) {
             model.addAttribute("user", userService.getUser());
@@ -88,8 +88,7 @@ public class HomeController {
                         file.getBytes(), ObjectUtils.asMap("resourcetype", "auto"));
                 message.setPicturePath(uploadResult.get("url").toString());
                 String uploadedName = uploadResult.get("public_id").toString();
-//                String transformedImage = cloudc.createUrl(uploadedName, 150, 150);
-//                message.setPicturePath(transformedImage);
+
                 message.setUser(userService.getUser());
             } catch (IOException e) {
                 e.printStackTrace();
